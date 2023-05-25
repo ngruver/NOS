@@ -11,14 +11,16 @@ In order to obtain many SASA labels, we use [IgFold's archive of pre-computed st
 ```
 PYTHONPATH="." python scripts/data/label_igfold_poas.py
 ```
-In order to used diffusion models with fixed dimension, we align the labeled sequences using a [wrapper script](https://github.com/ngruver/seq-struct/blob/main/scripts/data/align_igfold_poas.py) around ANARCI. 
+In order to used diffusion models with fixed dimension, we align the labeled sequences using a [wrapper script](https://github.com/ngruver/seq-struct/blob/main/scripts/data/align_igfold_poas.py) around ANARCI:
+```
+PYTHONPATH="." python scripts/data/align_igfold_poas.py
+```
 
-For infilling-based sampling, our scripts expect sequences formatted 
-Expects protein sequences with spaces
+For infilling-based sampling, our scripts expect space separated sequences with "\[MASK\]" denoting the infilling locations. An example can be found in the [test infill seed file](https://github.com/ngruver/seq-struct/blob/main/infill_test_seeds.txt). 
 
 ## Basic Usage
 
-To train a sequence diffusion model, you can run
+To train a sequence diffusion model without a discriminative head, you can run
 ```
 PYTHONPATH="." python scripts/train_seq_model.py \
   model=[MODEL TYPE] \
@@ -29,16 +31,28 @@ PYTHONPATH="." python scripts/train_seq_model.py \
   vocab_file=[VOCAB FILE IN THIS REPO'S BASE DIR] \
   log_dir=[LOGGING DIRECTORY]
 ```
+For the Gaussian corruption process (i.e. model="gaussian"), the additional argument should be set carefully:
+```
+  model.noise_schedule.noise_scale=[NOISE SCALE] \
+```
+This parameter effects the variance of the noise applied to the token embeddings. The noise schedule is unchanged, but the variance at each forward step, and the corresponding prior, is scaled multiplicatively. Reasonable defaults are in the range \[2, 10\]. 
 
-'target_cols=["ss_perc_sheet"]' \
+To train a model with a discriminative head, the following additional arguments are necessary:
+
+```
+  'target_cols=[[OBJECTIVE NAME 1], ..., [OBJECTIVE NAME K]]' \
+  discr_batch_ratio=4 \
+```
+
+
 model.noise_schedule.noise_scale=5 \
-discr_batch_ratio=4 \
 
-
-To sample from a model, you can run
+To perform basic sampling from a model, you can run
 ```
 PYTHONPATH="." python scripts/sample.py
 ```
+
+Guidance
 
 ## Infilling Experiments
 
