@@ -1,4 +1,6 @@
 # Protein Design with Guided Discrete Diffusion
+## LaMBO + NOS = LaMBO-2
+
 <p align="center">
   <img src="/assets/top_fig.png" width=900>
 </p>
