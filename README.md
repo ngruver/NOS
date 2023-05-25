@@ -17,6 +17,8 @@ The recent success of diffusion models for images has led to their adoption in o
 pip install -r requirements.txt
 ```
 
+To install ANARCI for sequence alignment, follow the instructions in the [official repo](https://github.com/oxpig/ANARCI). If you wish to recreate the [DiffAb](https://github.com/luost26/diffab) and [RFDiffusion](https://github.com/RosettaCommons/RFdiffusion) comparisons, these repos also contain their own dependencies. 
+
 ## Datasets
 
 In order to obtain many SASA labels, we use [IgFold's archive of pre-computed structures on paired OAS (pOAS)](https://github.com/Graylab/IgFold#synthetic-antibody-structures). We extract the sequences and structures and labeled them by running the [labeling script](https://github.com/ngruver/NOS/blob/main/scripts/data/label_igfold_poas.py):
