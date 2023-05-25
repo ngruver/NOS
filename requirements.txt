@@ -1,0 +1,12 @@
+torch
+pytorch_lightning
+biotite
+biopython
+transformers
+tensorflow
+astropy
+wandb
+matplotlib
+pandas
+scikit-learn
+seaborn

@@ -1,0 +1,52 @@
+defaults:
+  - model: gaussian
+
+seed: ${trial_id}
+trial_id: 0
+project_name: guided_protein_seq
+
+data_dir: /scratch/nvg7279/datasets/igfold_labeled_cleaned
+#/scratch/nvg7279/datasets/sabdab_and_poas
+train_fn: train.csv
+val_fn: val_iid.csv
+max_samples: 100000
+
+target_cols: null #['sasa']
+discr_batch_ratio: null
+
+vocab_file: /home/nvg7279/src/seq-struct/vocab.txt
+vocab_size: 30
+use_alignment_tokens: True
+
+log_dir: /scratch/nvg7279/logs/guided_protein_seq
+exp_name: ar_mlm_test
+exp_dir: ${log_dir}/${exp_name}
+
+val_sample_frequency: 4
+num_samples: 256
+infill_seeds_fn: null #/home/nvg7279/src/seq-struct/infill_test_seeds.txt
+guidance_kwargs: null
+autoregressive_sample: False
+
+resume_ckpt: null
+#/scratch/nvg7279/logs/guided_protein_seq/var_length_test/models/best_by_valid/epoch=1-step=134.ckpt 
+#/scratch/nvg7279/logs/guided_protein_seq/test/models/best_by_valid/epoch=9-step=790.ckpt
+
+max_seq_len: 300
+min_seq_len: 128
+trim_strategy: "randomcrop"
+
+gradient_clip: 10.0
+min_epochs: 1000
+max_epochs: 1000
+early_stop_patience: 0
+batch_size: 128
+loader_workers: 4
+
+ngpu: 1
+
+hydra:
+  run:
+    dir: ${log_dir}
+  sweep:
+    dir: ${log_dir}

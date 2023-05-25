@@ -1,0 +1,40 @@
+# @package _global_
+model:
+  _target_: seq_models.model.gaussian_diffusion.GaussianDiffusion
+
+  network:
+    _target_: seq_models.model.gaussian_diffusion.GaussianDiffusionTransformer
+    in_channels: 16
+    vocab_size: ${vocab_size}
+    dropout: 0.0
+    bert_config_name: "prajjwal1/bert-small"
+    discr_stop_grad: True
+    target_channels: 0
+
+  noise_schedule:
+    _target_: seq_models.schedule.noise_schedule.GaussianDiffusionSchedule
+    timesteps: 1000
+    noise_schedule: "cosine"
+    noise_scale: 10
+
+  optimizer:
+    _target_: torch.optim.AdamW
+    lr: 5e-4
+  
+  lr_scheduler:
+    _target_:  transformers.get_linear_schedule_with_warmup
+    num_warmup_steps: 10
+    num_training_steps: ${max_epochs}
+
+  # if self.lr_scheduler == "OneCycleLR":
+#     retval["lr_scheduler"] = {
+#         "scheduler": torch.optim.lr_scheduler.OneCycleLR(
+#             optim,
+#             max_lr=1e-2,
+#             epochs=self.epochs,
+#             steps_per_epoch=self.steps_per_epoch,
+#         ),
+#         "monitor": "val_loss",
+#         "frequency": 1,
+#         "interval": "step",
+#     }

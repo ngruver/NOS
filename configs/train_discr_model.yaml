@@ -1,0 +1,73 @@
+defaults:
+  - model: mlm
+
+seed: ${trial_id}
+trial_id: 0
+project_name: guided_protein_seq
+
+data_dir: /scratch/nvg7279/datasets/igfold_labeled_cleaned
+train_fn: train.csv
+val_fn: val_iid.csv
+max_samples: 100000
+
+target_cols: ['sasa'] #['ss_perc_sheet']
+discr_epoch_ratio: null
+
+vocab_file: /home/nvg7279/src/seq-struct/vocab.txt
+vocab_size: 30
+use_alignment_tokens: True
+
+log_dir: /scratch/nvg7279/logs/guided_protein_seq
+exp_name: train_disrc_test
+exp_dir: ${log_dir}/${exp_name}
+
+ckpt_path: /scratch/nvg7279/logs/guided_protein_seq/ar_mlm_test/models/best_by_valid/epoch=74-step=53700.ckpt
+train_w_noise: True
+
+max_seq_len: 300
+min_seq_len: 128
+trim_strategy: "randomcrop"
+
+gradient_clip: 10.0
+min_epochs: 1000
+max_epochs: 1000
+early_stop_patience: 0
+batch_size: 128
+loader_workers: 4
+
+ngpu: 1
+
+hydra:
+  run:
+    dir: ${log_dir}
+  sweep:
+    dir: ${log_dir}
+
+# if self.lr_scheduler == "OneCycleLR":
+#     retval["lr_scheduler"] = {
+#         "scheduler": torch.optim.lr_scheduler.OneCycleLR(
+#             optim,
+#             max_lr=1e-2,
+#             epochs=self.epochs,
+#             steps_per_epoch=self.steps_per_epoch,
+#         ),
+#         "monitor": "val_loss",
+#         "frequency": 1,
+#         "interval": "step",
+#     }
+# elif self.lr_scheduler == "LinearWarmup":
+#     # https://huggingface.co/docs/transformers/v4.21.2/en/main_classes/optimizer_schedules#transformers.get_linear_schedule_with_warmup
+#     # Transformers typically do well with linear warmup
+#     warmup_steps = int(self.epochs * 0.1)
+#     pl.utilities.rank_zero_info(
+#         f"Using linear warmup with {warmup_steps}/{self.epochs} warmup steps"
+#     )
+#     retval["lr_scheduler"] = {
+#         "scheduler": get_linear_schedule_with_warmup(
+#             optim,
+#             num_warmup_steps=warmup_steps,
+#             num_training_steps=self.epochs,
+#         ),
+#         "frequency": 1,
+#         "interval": "epoch",  # Call after 1 epoch
+#     }

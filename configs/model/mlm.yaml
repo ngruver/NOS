@@ -1,0 +1,27 @@
+# @package _global_
+model:
+  _target_: seq_models.model.mlm_diffusion.MLMDiffusion
+
+  network:
+    _target_: seq_models.model.mlm_diffusion.MLMDiffusionTransformer
+    vocab_size: ${vocab_size}
+    dropout: 0.0
+    bert_config_name: "prajjwal1/bert-small"
+    discr_stop_grad: True
+    target_channels: 0
+
+  noise_schedule:
+    _target_: seq_models.schedule.noise_schedule.DiscreteCorruptionSchedule
+    vocab_file: ${vocab_file}
+    timesteps: 64
+    noise_schedule: "cosine"
+    noise_type: "mask"
+
+  optimizer:
+    _target_: torch.optim.AdamW
+    lr: 5e-4
+
+  lr_scheduler:
+    _target_:  transformers.get_linear_schedule_with_warmup
+    num_warmup_steps: 10
+    num_training_steps: ${max_epochs}
