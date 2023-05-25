@@ -1,5 +1,8 @@
-# Protein Design with Guided Discrete Diffusion \
-LaMBO + NOS = LaMBO-2
+<div>
+<h1> Protein Design with Guided Discrete Diffusion
+  
+[LaMBO](https://github.com/samuelstanton/lambo) + [NOS](https://github.com/ngruver/NOS) <img src="assets/nos.jpg" height="50" style="display: inline" vertical-align: middle /> = [LaMBO-2](https://github.com/ngruver/NOS) </h1>
+</div>
 
 <p align="center">
   <img src="/assets/top_fig.png" width=900>
@@ -61,18 +64,42 @@ PYTHONPATH="." python scripts/sample.py
 
 ## Vanilla Infilling Experiments
 
-To recreate the infilling experiments in section 5.1 
-[script](https://github.com/ngruver/NOS/blob/main/scripts/infill/run_diffusion.py). 
+To recreate the infilling experiments in section 5.1, there is a [script that wraps](https://github.com/ngruver/NOS/blob/main/scripts/infill/run_diffusion.py) the vanilla sampling code, creating seed files with "\[MASK\]"s for the desired CDRs and CDR numbering method. For example, given a train model checkpoint, one can run 
+```
+PYTHONPATH="." python scripts/infill/run_diffusion.py \
+    model=[MODEL TYPE] \
+    ckpt_path=[CKPT PATH] \
+    +seeds_fn=[PATH TO poas_seeds.csv] \
+    +results_dir=[RESULTS DIR] \
+```
+
+We also obtained infills from [DiffAb](https://github.com/luost26/diffab) and [RFDiffusion](https://github.com/RosettaCommons/RFdiffusion). After cloning these repos into this directory, the provide wrapper scripts for [DiffAb](https://github.com/ngruver/NOS/blob/main/scripts/infill/run_diffab.py) and [RFDiffusion](https://github.com/ngruver/NOS/blob/main/scripts/infill/run_rfdiffusion.py) can be used to sample infills and extract them into a consistent format. 
 
 ## Guidance Experiments
 
-
+To recreate the experiments in section 5.2, we also provide a [wrapper script](https://github.com/ngruver/NOS/blob/main/scripts/control/sample_diffusion.py). As an example, guided infilling with continuous corruptions, optimizing for SASA, can be run with 
+```
 PYTHONPATH="." ./python-greene scripts/control/sample_diffusion.py \
-    model=mlm \
+    model=gaussian \
     model.network.target_channels=1 \
-    ckpt_path="/scratch/nvg7279/logs/guided_protein_seq/mlm_sheet_discr_joint/models/best_by_valid/epoch\=49-step\=35550.ckpt" \
+    ckpt_path=[CKPT PATH, MODEL TRAINED FOR SASA] \
     +guidance_kwargs.step_size=1.0 \
     +guidance_kwargs.stability_coef=0.01 \
     +guidance_kwargs.num_steps=10 \
-    +seeds_fn=/home/nvg7279/src/seq-struct/poas_seeds_small.csv \
-    +results_dir=/home/nvg7279/src/seq-struct/mlm_control_sheet \
+    +seeds_fn=[PATH TO poas_seeds.csv] \
+    +results_dir=[RESULTS DIR] \
+```
+For guided infilling with discrete corruptions, optimizing for percentage of beta sheets, try running
+```
+PYTHONPATH="." ./python-greene scripts/control/sample_diffusion.py \
+    model=mlm \
+    model.network.target_channels=1 \
+    ckpt_path=[CKPT PATH, MODEL TRAINED FOR BETA SHEETS] \
+    +guidance_kwargs.step_size=1.0 \
+    +guidance_kwargs.stability_coef=0.01 \
+    +guidance_kwargs.num_steps=10 \
+    +seeds_fn=[PATH TO poas_seeds.csv] \
+    +results_dir=[RESULTS DIR] \
+```
+
+We also provide our approximate [PPLM implementation](https://github.com/ngruver/NOS/blob/main/seq_models/model/autoregressive.py) and the [wrapper script](https://github.com/ngruver/NOS/blob/main/scripts/control/pplm.py) used for creating infills with PPLM. For the RFDiffusion and DiffAb diversification baselines we use samples obtained from the infilling wrapper scripts described above. 
