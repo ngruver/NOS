@@ -21,15 +21,16 @@ To install ANARCI for sequence alignment, follow the instructions in the [offici
 
 ## Datasets
 
+Preprocessed training and validation datasets are available in the [data](https://github.com/ngruver/NOS/tree/main/data) directory. To recreate the datasets from scratch, you can use the following instructions. 
+
 In order to obtain many SASA labels, we use [IgFold's archive of pre-computed structures on paired OAS (pOAS)](https://github.com/Graylab/IgFold#synthetic-antibody-structures). We extract the sequences and structures and labeled them by running the [labeling script](https://github.com/ngruver/NOS/blob/main/scripts/data/label_igfold_poas.py):
 ```
-PYTHONPATH="." python scripts/data/label_igfold_poas.py
+PYTHONPATH="." python scripts/data/process_igfold_poas.py
 ```
-In order to used diffusion models with fixed dimension, we align the labeled sequences using a [wrapper script](https://github.com/ngruver/NOS/blob/main/scripts/data/align_igfold_poas.py) around ANARCI:
+Finally, we choose [random test sequences](https://github.com/ngruver/NOS/blob/main/poas_seeds.txt), and remove any sequences with an overlapping heavy or light chain from the training dataset:
 ```
-PYTHONPATH="." python scripts/data/align_igfold_poas.py
+PYTHONPATH="." python scripts/data/make_splits.py
 ```
-Finally, we choose [random test sequences](https://github.com/ngruver/NOS/blob/main/poas_seeds.txt), and remove any sequences with an overlapping heavy or light chain from the training dataset. 
 
 For infilling-based sampling, our scripts expect space separated sequences with "\[MASK\]" denoting the infilling locations. An example can be found in the [test infill seed file](https://github.com/ngruver/NOS/blob/main/infill_test_seeds.txt). 
 
