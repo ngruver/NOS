@@ -81,7 +81,7 @@ We also obtained infills from [DiffAb](https://github.com/luost26/diffab) and [R
 
 To recreate the experiments in section 5.2, we also provide a [wrapper script](https://github.com/ngruver/NOS/blob/main/scripts/control/sample_diffusion.py). As an example, guided infilling with continuous corruptions, optimizing for SASA, can be run with 
 ```
-PYTHONPATH="." ./python-greene scripts/control/sample_diffusion.py \
+PYTHONPATH="." python scripts/control/sample_diffusion.py \
     model=gaussian \
     model.network.target_channels=1 \
     ckpt_path=[CKPT PATH, MODEL TRAINED FOR SASA] \
@@ -93,7 +93,7 @@ PYTHONPATH="." ./python-greene scripts/control/sample_diffusion.py \
 ```
 For guided infilling with discrete corruptions, optimizing for percentage of beta sheets, try running
 ```
-PYTHONPATH="." ./python-greene scripts/control/sample_diffusion.py \
+PYTHONPATH="." python scripts/control/sample_diffusion.py \
     model=mlm \
     model.network.target_channels=1 \
     ckpt_path=[CKPT PATH, MODEL TRAINED FOR BETA SHEETS] \
