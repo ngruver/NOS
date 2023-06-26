@@ -7,7 +7,7 @@ project_name: guided_protein_seq
 
 data_dir: /scratch/nvg7279/datasets/igfold_labeled_cleaned
 #/scratch/nvg7279/datasets/sabdab_and_poas
-train_fn: train.csv
+train_fn: train_*.csv #train.csv
 val_fn: val_iid.csv
 max_samples: 100000
 

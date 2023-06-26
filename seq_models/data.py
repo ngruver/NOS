@@ -63,8 +63,8 @@ class LabeledDataset(Dataset):
 
         self.dataset_name = os.path.basename(config.data_dir)
         data_fn = os.path.join(config.data_dir, split)
-        df = pd.read_csv(data_fn)
-        
+        df = pd.concat([pd.read_csv(fn) for fn in glob.glob(data_fn)])
+
         split_wo_ext = split.split(".")[0]
         self.cache_fname = os.path.join(config.data_dir, f"{split_wo_ext}_cached.pkl")
         if os.path.exists(self.cache_fname):
