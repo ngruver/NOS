@@ -1,7 +1,7 @@
 <div>
 <h1> Protein Design with Guided Discrete Diffusion
   
-[LaMBO](https://github.com/samuelstanton/lambo) + [NOS](https://github.com/ngruver/NOS) <img src="assets/nos.jpg" height="50" style="display: inline" vertical-align: middle /> = [LaMBO-2](https://github.com/ngruver/NOS) </h1>
+[LaMBO](https://github.com/samuelstanton/lambo) + [NOS](https://github.com/ngruver/NOS) <img src="assets/nos.jpg" height="50" style="display: inline" vertical-align: middle /> = [LaMBO-2](https://arxiv.org/abs/2305.20009) </h1>
 </div>
 
 <p align="center">
