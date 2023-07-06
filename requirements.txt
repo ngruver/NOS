@@ -10,3 +10,4 @@ matplotlib
 pandas
 scikit-learn
 seaborn
+p_tqdm
