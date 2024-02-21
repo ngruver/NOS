@@ -208,7 +208,8 @@ def evaluate_samples(
     labeler = BioPythonSeqLabeler()
     s_for_labels = [re.sub("[\(\[].*?[\)\]]", "", s.replace(" ","")) for s in samples]
     s_for_labels = [s.replace("-", "") for s in s_for_labels]
-
+    s_for_labels = [s for s in s_for_labels if len(s) > 0]
+    
     if len(s_for_labels) == 0:
         return log
 
